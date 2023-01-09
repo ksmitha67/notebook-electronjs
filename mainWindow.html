@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notebook</title>
+  <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+  <nav>
+    <div class="nav">
+      <a class="logo">Notebook</a>   
+    </div>
+  </nav>
+  <hr class="line" />
+  <ul class="list"></ul>
+
+
+  <script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+    const ul = document.querySelector('ul');
+
+    ipcRenderer.on('item:add', function(e, item){
+      const li = document.createElement('li');
+      li.className = 'items';
+      const itemText = document.createTextNode(item);
+      const hr = document.createElement('hr');
+      hr.className = 'hrline';
+      li.appendChild(itemText);
+      li.appendChild(hr);
+      ul.appendChild(li);
+    
+    });
+
+    ipcRenderer.on('item:clear', function(){
+      ul.className = '';
+      ul.innerHTML = '';
+    });
+
+    ul.addEventListener('dblclick', removeItem);
+
+    function removeItem(e){
+      event.target.remove();
+      if(ul.children.length == 0){
+        ul.className = '';
+      }
+    }
+  </script>
+</body>
+</html>
